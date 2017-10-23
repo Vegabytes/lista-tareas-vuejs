@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lista de tareas con Vue.js</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .app-form input {
+            border-radius: 0;
+        }
+
+        .tareaHecha {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="taskApp" class="col-sm-8" col-sm-offset-2>
+            <!---Vuejs Component-->
+            <h1>{{nameApp}}</h1>
+
+            <form v-on:submit="agregarTarea($event)" class="app-form">
+
+                <input type="text" v-model="tareas.titulo" class="form-control">
+                <input type="submit" value="Agregar Tarea" class="btn btn-block btn-success">
+
+            </form>
+            <br>
+            
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Hecho!</th>
+                    <th>Tarea</th>
+                    <th>Eliminar</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="tarea in tareas">
+                       <td>
+                           <input type="checkbox" v-model="tarea.hecho">
+                       </td>
+                        <td :class="{tareaHecha:tarea.hecho}">
+                          {{tarea.titulo}}
+                        </td>
+                        <td>
+                            <button v-on:click="eliminarTarea(tarea)" class="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        new Vue({
+            el: '#taskApp',
+            data: {
+                nameApp: 'Tareas Vue.js',
+                tareas: [
+                    {
+                        titulo : 'Tarea 1',
+                        hecho : true
+                    },          {
+                        titulo : 'Tarea 2',
+                        hecho : false
+                    },          {
+                        titulo : 'Tarea 3',
+                        hecho : true
+                    }
+                ]
+            },
+            methods: {
+                eliminarTarea : function(tarea) {
+                    this.tareas.splice(this.tareas.indexOf(tarea),1);
+                },
+                agregarTarea : function(e) {
+                    e.preventDefault();
+                    this.tareas.push({
+                        titulo: this.tareas.titulo,
+                        hecho: false
+                    });
+                    this.tareas.titulo = '';
+                }
+            }
+        })
+    </script>
+</body>
+</html>
